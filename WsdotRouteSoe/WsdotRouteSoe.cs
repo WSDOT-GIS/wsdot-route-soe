@@ -21,7 +21,7 @@ using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Server;
 using ESRI.ArcGIS.Geometry;
 using ESRI.ArcGIS.Geodatabase;
-using ESRI.ArcGIS.SOESupport;
+using ESRI.Server.SOESupport;
 using ESRI.ArcGIS.Location;
 
 //TODO: sign the project (project properties > signing tab > sign the assembly)
@@ -138,7 +138,7 @@ namespace WsdotRouteSoe
             bool hasLocations = operationInput.TryGetArray("locations", out object[] locationsArray);
             if (!hasLocations)
             {
-                throw new ArgumentException($"Expected \"locations\" to be a JSON array: {operationInput.ToJson()}", "locations");
+                throw new ArgumentException($"Expected \"locations\" to be a JSON array: {operationInput.ToJson()}", nameof(operationInput));
             }
 
             var locations = locationsArray.Cast<JsonObject>().ToRouteLocations();

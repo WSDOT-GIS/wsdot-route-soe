@@ -36,7 +36,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 
-[assembly: ESRI.ArcGIS.SOESupport.AddInPackage("WsdotRouteSoe", "1b292a9a-3c5f-4a80-a8be-d57bf58b61d5",
+[assembly: ESRI.Server.SOESupport.AddInPackage("WsdotRouteSoe", "1b292a9a-3c5f-4a80-a8be-d57bf58b61d5",
     Author = "Jeff Jacobson",
     Company = "Washington State Department of Transportation",
     Date = "12/27/2018 1:28:45 PM",

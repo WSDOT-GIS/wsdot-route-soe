@@ -11,6 +11,25 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\keyfile.snk" Link="keyfile.snk" />
-    <None Include="Backup-2.x.zip" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="ESRI.Server.Carto">
+      <HintPath>$(ENTDEVKITJAVA)\DotNet\ESRI.Server.Carto.dll</HintPath>
+    </Reference>
+    <Reference Include="ESRI.Server.Geodatabase">
+      <HintPath>$(ENTDEVKITJAVA)\DotNet\ESRI.Server.Geodatabase.dll</HintPath>
+    </Reference>
+    <Reference Include="ESRI.Server.Geometry">
+      <HintPath>$(ENTDEVKITJAVA)\DotNet\ESRI.Server.Geometry.dll</HintPath>
+    </Reference>
+    <Reference Include="ESRI.Server.Server">
+      <HintPath>$(ENTDEVKITJAVA)\DotNet\ESRI.Server.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="ESRI.Server.SOESupport">
+      <HintPath>$(ENTDEVKITJAVA)\DotNet\ESRI.Server.SOESupport.dll</HintPath>
+    </Reference>
+    <Reference Include="ESRI.Server.System">
+      <HintPath>$(ENTDEVKITJAVA)\DotNet\ESRI.Server.System.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

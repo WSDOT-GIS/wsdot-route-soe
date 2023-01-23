@@ -1,7 +1,7 @@
 ﻿using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
 using ESRI.ArcGIS.Location;
-using ESRI.ArcGIS.SOESupport;
+using ESRI.Server.SOESupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;

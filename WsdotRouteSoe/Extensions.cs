@@ -1,9 +1,9 @@
 ﻿using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Geodatabase;
-using ESRI.ArcGIS.Location;
+//using ESRI.ArcGIS.Location;
 using ESRI.ArcGIS.Server;
-using ESRI.ArcGIS.SOESupport;
+using ESRI.Server.SOESupport;
 using System;
 using System.Collections.Generic;
 
@@ -15,7 +15,7 @@ namespace WsdotRouteSoe
 
         public static IRouteLocator2 GetRouteLocator(this IServerObjectHelper serverObjectHelper, long layerId, string routeIdFieldName)
         {
-            var server = (IMapServer4)serverObjectHelper.ServerObject;
+            var server = (IMapServer)serverObjectHelper.ServerObject;
             var serverDataAccess = (IMapServerDataAccess)server;
             var dataSet = (IDataset)serverDataAccess.GetDataSource(server.DefaultMapName, Convert.ToInt32(layerId));
             var name = dataSet.FullName;
@@ -81,18 +81,6 @@ namespace WsdotRouteSoe
                     throw new ArgumentException($"Input JArray element #{elementNo} did not have valid measure value(s): {jToken.ToString()}", nameof(jArray));
                 }
 
-            }
-        }
-
-        public static IEnumerable<IFeatureLayer2> EnumerateFeatureLayers(this IMap map)
-        {
-            // UID for "IFeatureLayer"
-            UID uid = new UIDClass { Value = "{40A9E885-5533-11d0-98BE-00805F7CED21}" };
-            var enumLayers = map.Layers[uid, true];
-            var layer = enumLayers.Next();
-            while (layer != null)
-            {
-                yield return layer as IFeatureLayer2;
             }
         }
 
