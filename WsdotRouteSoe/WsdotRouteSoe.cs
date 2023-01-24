@@ -28,8 +28,11 @@ using ESRI.ArcGIS.Location;
 //      this is strongly suggested if the dll will be registered using regasm.exe <your>.dll /codebase
 
 
-namespace WsdotRouteSoe
+namespace Wsdot.Lrs.Location
 {
+    /// <summary>
+    /// Defines the Server Object Extension (SOE)
+    /// </summary>
     [ComVisible(true)]
     [Guid("356fe3bf-067f-4aac-b81b-0bd803e480be")]
     [ClassInterface(ClassInterfaceType.None)]
@@ -47,27 +50,41 @@ namespace WsdotRouteSoe
         const string routeIdFieldName = "RouteIdentifier";
 
 
-        private string soe_name;
+        private readonly string soe_name;
 
+#pragma warning disable IDE0052 // Remove unread private members
         private IPropertySet configProps;
+        private readonly ServerLogger logger;
+#pragma warning restore IDE0052 // Remove unread private members
         private IServerObjectHelper serverObjectHelper;
-        private ServerLogger logger;
-        private IRESTRequestHandler reqHandler;
+        private readonly IRESTRequestHandler reqHandler;
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable. Will be set in Construct.
+        /// <summary>
+        /// Creates a new instance of this class.
+        /// </summary>
         public WsdotRouteSoe()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable. Will be set in Construct.
         {
             soe_name = this.GetType().Name;
             logger = new ServerLogger();
-            reqHandler = new SoeRestImpl(soe_name, CreateRestSchema()) as IRESTRequestHandler;
+            reqHandler = new SoeRestImpl(soe_name, CreateRestSchema());
         }
 
         #region IServerObjectExtension Members
 
+        /// <summary>
+        /// Performs SOE initialization.
+        /// </summary>
+        /// <param name="pSOH"></param>
         public void Init(IServerObjectHelper pSOH)
         {
             serverObjectHelper = pSOH;
         }
 
+        /// <summary>
+        /// Run on SOE shutdown.
+        /// </summary>
         public void Shutdown()
         {
         }
@@ -76,6 +93,10 @@ namespace WsdotRouteSoe
 
         #region IObjectConstruct Members
 
+        /// <summary>
+        /// Handles setting of user-defined property settings.
+        /// </summary>
+        /// <param name="props"></param>
         public void Construct(IPropertySet props)
         {
             configProps = props;
@@ -85,11 +106,26 @@ namespace WsdotRouteSoe
 
         #region IRESTRequestHandler Members
 
+        /// <summary>
+        /// Handles the user request for SOE schema.
+        /// </summary>
+        /// <returns></returns>
         public string GetSchema()
         {
             return reqHandler.GetSchema();
         }
 
+        /// <summary>
+        /// Handles rest requests and returns response as <see cref="byte"/> <see cref="System.Array"/>
+        /// </summary>
+        /// <param name="Capabilities"></param>
+        /// <param name="resourceName"></param>
+        /// <param name="operationName"></param>
+        /// <param name="operationInput"></param>
+        /// <param name="outputFormat"></param>
+        /// <param name="requestProperties"></param>
+        /// <param name="responseProperties"></param>
+        /// <returns></returns>
         public byte[] HandleRESTRequest(string Capabilities, string resourceName, string operationName, string operationInput, string outputFormat, string requestProperties, out string responseProperties)
         {
             return reqHandler.HandleRESTRequest(Capabilities, resourceName, operationName, operationInput, outputFormat, requestProperties, out responseProperties);
@@ -99,9 +135,9 @@ namespace WsdotRouteSoe
 
         private RestResource CreateRestSchema()
         {
-            RestResource rootRes = new RestResource(soe_name, false, RootResHandler);
+            RestResource rootRes = new(soe_name, false, RootResHandler);
 
-            RestOperation sampleOper = new RestOperation("findRouteLocations",
+            RestOperation sampleOper = new("findRouteLocations",
                                                       new string[] { "layer", "locations" },
                                                       new string[] { "json" },
                                                       FindRouteLocationsHandler);
@@ -111,11 +147,11 @@ namespace WsdotRouteSoe
             return rootRes;
         }
 
-        private byte[] RootResHandler(NameValueCollection boundVariables, string outputFormat, string requestProperties, out string responseProperties)
+        private byte[] RootResHandler(NameValueCollection boundVariables, string outputFormat, string requestProperties, out string? responseProperties)
         {
             responseProperties = null;
 
-            JsonObject result = new JsonObject();
+            JsonObject result = new();
             //result.AddString("hello", "world");
 
             return Encoding.UTF8.GetBytes(result.ToJson());
@@ -125,7 +161,7 @@ namespace WsdotRouteSoe
                                                   JsonObject operationInput,
                                                       string outputFormat,
                                                       string requestProperties,
-                                                  out string responseProperties)
+                                                  out string? responseProperties)
         {
             responseProperties = null;
 
@@ -141,14 +177,14 @@ namespace WsdotRouteSoe
                 throw new ArgumentException($"Expected \"locations\" to be a JSON array: {operationInput.ToJson()}", nameof(operationInput));
             }
 
-            var locations = locationsArray.Cast<JsonObject>().ToRouteLocations();
+            var locations = locationsArray.Cast<JsonObject>().ToRouteLocations<string>();
 
-            IRouteLocator2 routeLocator = serverObjectHelper.GetRouteLocator(layerId.GetValueOrDefault(0), routeIdFieldName);
+            IRouteLocator2<string> routeLocator = serverObjectHelper.GetRouteLocator<string>(layerId.GetValueOrDefault(0), routeIdFieldName);
 
             var located = locations.Select(loc =>
             {
                 routeLocator.Locate(loc, out IGeometry result, out esriLocatingError locatingError);
-                return new LocationResult
+                return new LocationResult<string>
                 {
                     RouteLocation = loc,
                     Geometry = result,

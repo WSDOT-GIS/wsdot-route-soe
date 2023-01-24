@@ -3,16 +3,12 @@ using ESRI.ArcGIS.Geometry;
 using ESRI.ArcGIS.Location;
 using ESRI.Server.SOESupport;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace WsdotRouteSoe
+namespace Wsdot.Lrs.Location
 {
-    public class LocationResult
+    public class LocationResult<T> where T: notnull
     {
-        public IRouteLocation2 RouteLocation { get; set; }
+        public IRouteLocation2<T> RouteLocation { get; set; }
         public IGeometry Geometry { get; set; }
         public esriLocatingError LocatingError { get; set; }
 
