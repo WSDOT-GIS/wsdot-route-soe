@@ -34,7 +34,4 @@
       <HintPath>$(ENTDEVKITJAVA)\DotNet\ESRI.Server.System.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ESRI.ArcGIS.Location\" />
-  </ItemGroup>
 </Project>
